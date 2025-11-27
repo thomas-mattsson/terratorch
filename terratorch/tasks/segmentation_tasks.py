@@ -395,7 +395,12 @@ class SemanticSegmentationTask(TerraTorchTask):
                 fig = datamodule.test_dataset.plot(sample) if hasattr(datamodule.test_dataset, "plot") else datamodule.plot(sample, "test")
                 if fig:
                     summary_writer = self.logger.experiment
-                    caption = batch.get("filename", [None])[0] or str(batch_idx)
+                    caption = batch.get("filename", batch_idx)
+                    if isinstance(caption, dict):
+                        caption = list(caption.values())[0]
+                    if isinstance(caption, list):
+                        caption = caption[0]
+                    caption = str(caption).rsplit('.')[0]
                     if hasattr(summary_writer, "add_figure"):
                         summary_writer.add_figure(f"image/test_{caption}", fig)
                     elif hasattr(summary_writer, "log_figure"):
@@ -453,7 +458,12 @@ class SemanticSegmentationTask(TerraTorchTask):
                 fig = datamodule.val_dataset.plot(sample) if hasattr(datamodule.val_dataset, "plot") else datamodule.plot(sample, "val") 
                 if fig:
                     summary_writer = self.logger.experiment
-                    caption = batch.get("filename", [None])[0] or str(batch_idx)
+                    caption = batch.get("filename", batch_idx)
+                    if isinstance(caption, dict):
+                        caption = list(caption.values())[0]
+                    if isinstance(caption, list):
+                        caption = caption[0]
+                    caption = str(caption).rsplit('.')[0]
                     if hasattr(summary_writer, "add_figure"):
                         summary_writer.add_figure(f"image/{caption}", fig, global_step=self.global_step)
                     elif hasattr(summary_writer, "log_figure"):
