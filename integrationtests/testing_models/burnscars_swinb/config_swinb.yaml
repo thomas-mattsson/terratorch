@@ -62,7 +62,7 @@ data:
     val_data_root: /data/geodata-060bbc44822a11efb3260a580a830dad/training_data
     val_label_data_root: /data/geodata-060bbc44822a11efb3260a580a830dad/labels
     val_split: /data/geodata-060bbc44822a11efb3260a580a830dad/split_files/val_data.txt
-deploy_config_file: true
+#deploy_config_file: true
 model:
   class_path: terratorch.tasks.SemanticSegmentationTask
   init_args:
