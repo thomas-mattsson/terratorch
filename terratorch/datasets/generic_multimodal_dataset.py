@@ -1,7 +1,6 @@
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# Licensed under the MIT License.
+# Copyright contributors to the Terratorch project
 
-"""Module containing generic dataset classes"""
+"""Module containing generic multimodal dataset classes"""
 
 import glob
 import logging
@@ -16,7 +15,6 @@ from pathlib import Path
 from typing import Any
 
 import albumentations as A
-import matplotlib as mpl
 import numpy as np
 import rioxarray
 import xarray as xr
@@ -27,7 +25,7 @@ from matplotlib.patches import Rectangle
 from matplotlib.colors import ListedColormap
 from torchgeo.datasets import NonGeoDataset
 
-from terratorch.datasets.utils import HLSBands, default_transform, filter_valid_files, generate_bands_intervals
+from terratorch.datasets.utils import HLSBands, default_transform, generate_bands_intervals
 from terratorch.datasets.transforms import MultimodalTransforms, MultimodalToTensor
 
 logger = logging.getLogger("terratorch")
@@ -193,8 +191,8 @@ class GenericMultimodalDataset(NonGeoDataset, ABC):
                 glob_as_regex = '^' + ''.join('(.*?)' if ch == '*' else re.escape(ch)
                                               for ch in image_grep[mod]) + '$'
                 stem = re.match(glob_as_regex, os.path.basename(file_name)).group(1)
-                if allow_substring_file_names:
-                    # Remove file extensions
+                if "." not in image_grep[mod] and allow_substring_file_names:
+                    # Remove file extensions if no extension in image_grep
                     stem = os.path.splitext(stem)[0]
                 return stem
 
@@ -250,7 +248,7 @@ class GenericMultimodalDataset(NonGeoDataset, ABC):
                         m_files = [os.path.join(m_path, file + image_grep[m].strip('*'))]
                     else:
                         m_files = sorted(glob.glob(os.path.join(m_path, file + image_grep[m])))
-                        if (len(valid_files) > 10_000):
+                        if len(valid_files) > 10_000:
                             warnings.warn("Found large data folder. You can speed up the dataset build by "
                                           "providing split files with sample ids and suffixes without wildcards. E.g. "
                                           "sample id 'sample1' and suffix '_s2l2a.tif' for file 'sample1_s2l2a.tif'.")
@@ -263,7 +261,7 @@ class GenericMultimodalDataset(NonGeoDataset, ABC):
                                           f"Consider changing data structure or parameters for unique selection.")
                 else:
                     # Exact match
-                    file_path = os.path.join(m_path, file)
+                    file_path = os.path.join(m_path, file + image_grep[m].strip('*'))
                     if os.path.exists(file_path):
                         sample[m] = file_path
 
@@ -282,7 +280,7 @@ class GenericMultimodalDataset(NonGeoDataset, ABC):
                         sample["mask"] = l_files[-1]
                 else:
                     # Exact match
-                    file_path = os.path.join(label_data_root, file)
+                    file_path = os.path.join(label_data_root, file + label_grep.strip('*'))
                     if os.path.exists(file_path):
                         sample["mask"] = file_path
                 if "mask" not in sample:
@@ -301,9 +299,10 @@ class GenericMultimodalDataset(NonGeoDataset, ABC):
             raise ValueError(f"No samples found for multimodal dataset. Please review files, path, and grep params.\n"
                              f"data_root: {data_root}\n"
                              f"image_grep: {image_grep}\n"
+                             f"allow_substring_file_names: {allow_substring_file_names}\n"
                              f"allow_missing_modalities: {allow_missing_modalities}\n"
                              f"Candidate prefixes: {', '.join([valid_files[i] for i in idx])}\n"
-                             f"Sample candidate paths: {', '.join([failed_candidates[i] for i in idx])}")
+                             f"Sample candidate paths: {', '.join([str(failed_candidates[i]) for i in idx])}")
 
         self.rgb_indices = rgb_indices or {image_modalities[0]: [0, 1, 2]}
 

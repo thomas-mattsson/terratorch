@@ -370,8 +370,8 @@ class GenericMultiModalDataModule(NonGeoDataModule):
         if isinstance(image_grep, dict):
             # Check if image_grep is valid
             for key, grep in image_grep.items():
-                if "*" not in grep:
-                    warnings.warn(f"image_grep requires a wildcard with a suffix. "
+                if "*" not in grep and allow_substring_file_names:
+                    warnings.warn(f"image_grep requires a wildcard with a suffix if allow_substring_file_names=True. "
                                   f"Adding '*' to image_grep[{key}]={grep}.")
                     image_grep[key] = "*" + grep
                 if "*" in grep.strip("*/\\"):
@@ -380,8 +380,9 @@ class GenericMultiModalDataModule(NonGeoDataModule):
             self.image_grep = {m: image_grep[m] if m in image_grep else "*" for m in modalities}
         else:
             image_grep = image_grep or "*"  # Handle None
-            if "*" not in image_grep:
-                warnings.warn(f"image_grep requires a wildcard with a suffix. Adding '*' to image_grep={image_grep}.")
+            if "*" not in image_grep and allow_substring_file_names:
+                warnings.warn(f"image_grep requires a wildcard with a suffix if allow_substring_file_names=True. "
+                              f"Adding '*' to image_grep={image_grep}.")
                 image_grep = "*" + image_grep
             if "*" in image_grep.strip("*/\\"):
                 raise ValueError(f"GenericMultiModalDataModule can only handle image_grep with suffixes "
