@@ -5,9 +5,12 @@ trainer:
   devices: auto
   num_nodes: 1
   precision: 16-mixed
-  callbacks:    - class_path: lightning.pytorch.callbacks.LearningRateMonitor
+
+  callbacks:
+    - class_path: lightning.pytorch.callbacks.LearningRateMonitor
       init_args:
         logging_interval: epoch
+
     - class_path: lightning.pytorch.callbacks.ModelCheckpoint
       init_args:
         mode: min
@@ -15,16 +18,19 @@ trainer:
         filename: best-state_dict-{epoch:02d}
         dirpath: /dccstor/terratorch/tmp/timm_resnet34/
         save_weights_only: true
+
     - class_path: lightning.pytorch.callbacks.EarlyStopping
       init_args:
         monitor: val/loss
         patience: 20
+
   max_epochs: 2
   check_val_every_n_epoch: 1
   log_every_n_steps: 5
   enable_checkpointing: true
   default_root_dir: /dccstor/terratorch/tmp/timm_resnet34/
   logger: true
+
 
 data:
   # Tested with buildings data. Not available in ccc
