@@ -6,18 +6,18 @@ trainer:
   num_nodes: 1
   precision: 16-mixed
   callbacks:
-    - class_path: RichProgressBar
-    - class_path: LearningRateMonitor
+    - class_path: lightning.pytorch.callbacks.RichProgressBar
+    - class_path: lightning.pytorch.callbacks.LearningRateMonitor
       init_args:
         logging_interval: epoch
-    - class_path: ModelCheckpoint
+    - class_path: lightning.pytorch.callbacks.ModelCheckpoint
       init_args:
         mode: min
         monitor: val/loss
         filename: best-state_dict-{epoch:02d}
         dirpath: /dccstor/terratorch/tmp/smp_resnet34/
         save_weights_only: true
-    - class_path: EarlyStopping
+    - class_path: lightning.pytorch.callbacks.EarlyStopping
       init_args:
         monitor: val/loss
         patience: 20
@@ -70,11 +70,11 @@ data:
     num_classes: 2
     train_transform:
       - class_path: albumentations.D4
-      - class_path: ToTensorV2
+      - class_path: albumentations.pytorch.transforms.ToTensorV2
     val_transform:
-      - class_path: ToTensorV2
+      - class_path: albumentations.pytorch.transforms.ToTensorV2
     test_transform:
-      - class_path: ToTensorV2
+      - class_path: albumentations.pytorch.transforms.ToTensorV2
 model:
   class_path: terratorch.tasks.SemanticSegmentationTask
   init_args:

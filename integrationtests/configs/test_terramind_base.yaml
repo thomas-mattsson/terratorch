@@ -8,17 +8,17 @@ trainer:
   precision: 16-mixed
   logger: true
   callbacks:
-    - class_path: RichProgressBar
-    - class_path: LearningRateMonitor
+    - class_path: lightning.pytorch.callbacks.RichProgressBar
+    - class_path: lightning.pytorch.callbacks.LearningRateMonitor
       init_args:
         logging_interval: epoch
     # ---- Early stop if ----
-    - class_path: EarlyStopping
+    - class_path: lightning.pytorch.callbacks.EarlyStopping
       init_args:
         monitor: val/loss
         patience: 20
      # ---- Early stop endif ----
-    - class_path: ModelCheckpoint
+    - class_path: lightning.pytorch.callbacks.ModelCheckpoint
       init_args:
         dirpath: /dccstor/terratorch/tmp/terramind_base/
         mode: min
@@ -154,7 +154,7 @@ data:
 
     train_transform:
       - class_path: albumentations.D4  # Random flip and rotations
-      - class_path: ToTensorV2
+      - class_path: albumentations.pytorch.transforms.ToTensorV2
   
 model:
   class_path: terratorch.tasks.SemanticSegmentationTask
