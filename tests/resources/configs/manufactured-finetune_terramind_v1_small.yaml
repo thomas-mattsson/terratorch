@@ -36,11 +36,6 @@ data:
     num_classes: 2
     batch_size: 2
     num_workers: 4
-
-    train_transform:
-      - class_path: albumentations.pytorch.transforms.ToTensorV2
-        init_args: {}
-
     modalities:
       - S2L2A
 
@@ -97,6 +92,18 @@ data:
 
     no_label_replace: -1
     no_data_replace: 0
+    train_transform: # Test automated padding
+      - class_path: albumentations.RandomCrop
+        init_args:
+          height: 220
+          width: 220
+      - class_path: ToTensorV2
+    val_transform:
+      - class_path: albumentations.RandomCrop
+        init_args:
+          height: 220
+          width: 220
+      - class_path: ToTensorV2
 
 model:
   class_path: terratorch.tasks.SemanticSegmentationTask
