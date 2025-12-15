@@ -64,7 +64,7 @@ class SemanticSegmentationTask(TerraTorchTask):
         self,
         model_args: dict | None = None,
         model_factory: str | None = None,
-        model: Any = None,   # avoid torch.nn.Module in signature
+        model: torch.nn.Module | None = None,
         loss: str | list[str] | dict[str, float] | None = "ce",
         aux_heads: list[Any] | None = None,
         aux_loss: dict[str, float] | None = None,
