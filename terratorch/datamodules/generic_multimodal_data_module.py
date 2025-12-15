@@ -5,6 +5,7 @@ This module contains generic data modules for instantiation at runtime.
 """
 
 import logging
+from typing import Any, List, Optional
 import warnings
 from collections.abc import Callable, Iterable
 from pathlib import Path
@@ -217,9 +218,9 @@ class GenericMultiModalDataModule(NonGeoDataModule):
         skip_file_checks: bool = False,
         class_names: list[str] | None = None,
         constant_scale: dict[str, float] | None = None,
-        train_transform: dict | A.Compose | None | list = None,
-        val_transform: dict | A.Compose | None | list = None,
-        test_transform: dict | A.Compose | None | list = None,
+        train_transform: Optional[List[Any]] = None,
+        val_transform: Optional[List[Any]] = None,
+        test_transform: Optional[List[Any]] = None,
         shared_transforms: list | bool = True,
         expand_temporal_dimension: bool = False,
         no_data_replace: float | None = None,
