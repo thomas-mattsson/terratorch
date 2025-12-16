@@ -162,7 +162,7 @@ model:
     model_args:
       backbone: terramind_v1_base
       #  terramind_v1_base  # large version: terramind_v1_large
-      backbone_pretrained: true
+      backbone_pretrained: false
       backbone_modalities:
         - S2L1C
         - S1GRD

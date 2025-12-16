@@ -103,7 +103,7 @@ model:
   class_path: terratorch.tasks.SemanticSegmentationTask
   init_args:
     model_args:
-      backbone_pretrained: true 
+      backbone_pretrained: false  
       backbone: prithvi_eo_v2_600
       # backbone_ckpt_path: /terratorch/gfm_models/prithvi_eo_v2_600/Prithvi_EO_V2_600M.pt 
       backbone_drop_path: 0.1 

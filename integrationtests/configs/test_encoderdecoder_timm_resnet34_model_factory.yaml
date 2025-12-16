@@ -87,7 +87,7 @@ model:
     model_args:
       backbone: timm_resnet34
       num_classes: 2
-      backbone_pretrained: true
+      backbone_pretrained: false
       necks:
         - name: SelectIndices
           indices:

@@ -108,7 +108,7 @@ model:
   init_args:
     model_args: 
       backbone: timm_convnext_xlarge.fb_in22k # timm_convnext_large.fb_in22k , timm_convnext_xlarge.fb_in22k
-      backbone_pretrained: true 
+      backbone_pretrained: false 
       num_classes: 3
       backbone_in_chans: 6 # To be used with RGB when pretrained, can be more if not retrained
       necks: 
