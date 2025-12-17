@@ -48,9 +48,7 @@ jobs:
         run: |
           pip install pip==25.1
           pip --version
-          pip install -e .
-          pip cache purge
-          pip install -e .[test,surya,geobenchv2]
+          pip install -e .[test]
       - name: List pip dependencies
         run: pip list
       - name: Cleaning cache
