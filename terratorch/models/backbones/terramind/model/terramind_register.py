@@ -172,6 +172,16 @@ v1_pretraining_std = {
     "tok_ndvi@224": [0.322],
 }
 
+naip_mean = {
+    "naip@512": [107.20314516608458, 112.38461365995144, 93.28977241378502, 133.816892061648]
+}
+naip_std = {
+    "naip@512": [47.33802657655029, 39.109384320368385, 34.850792207554846, 47.32554578567598]
+}
+
+v1_5_pretraining_mean = {**v1_pretraining_mean, **naip_mean}
+v1_5_pretraining_std = {**v1_pretraining_std, **naip_std}
+
 tokenizer_dict = {
     "v1": {
         "tok_sen2l2a@224": terramind_v1_tokenizer_s2l2a,
